@@ -45,7 +45,7 @@ def home():
 		country = lookup[2]
 		state = lookup[3]
 		city = lookup[4]
-		network = lookup[5]
+		network = str(lookup[5])
 		asn = lookup[6]	
 		org = lookup[7]
 		return jsonify({"query": clientip, "country": country, "latitude": latitude, "longitude": longitude, "province/state": state, "city": city, "network": network, "asn": asn, "org": org}), 200
@@ -62,11 +62,11 @@ def home():
 		country = lookup[2]
 		state = lookup[3]
 		city = lookup[4]
-		network = lookup[5]
+		network = str(lookup[5])
 		asn = lookup[6]	
 		org = lookup[7]
 		return jsonify({"query": clientip, "country": country, "latitude": latitude, "longitude": longitude, "province/state": state, "city": city, "network": network, "asn": asn, "org": org}), 200
 if __name__ == '__main__':
-  app.run(host='0.0.0.0', debug=True, use_reloader=False, port=443)
+  app.run(host='0.0.0.0', debug=False, use_reloader=False, port=443)
 
 
