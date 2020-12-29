@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 from flask import *
-import json, geoip2.database
+import json, geoip2.database, ipaddress
 
 cityreader = geoip2.database.Reader('./geoip_files/GeoLite2-City.mmdb')
 asnreader =  geoip2.database.Reader('./geoip_files/GeoLite2-ASN.mmdb')
@@ -19,14 +19,7 @@ def geoiplookup(clientip):
 		org = asnresponse.autonomous_system_organization
 		return latitude, longitude, country, state, city, network, asn, org
 	except:
-		latitude = 'N/A'
-		longitude = 'N/A'
-		country = 'N/A'
-		state = 'N/A'
-		city = 'N/A'
-		network = 'N/A'
-		asn = 'N/A'	
-		org = 'N/A'
+		latitude = longitude = country = state = city = network = asn = org = 'N/A'
 		return latitude, longitude, country, state, city, network, asn, org
 
 app = Flask(__name__)
@@ -66,6 +59,27 @@ def home():
 		asn = lookup[6]	
 		org = lookup[7]
 		return jsonify({"query": clientip, "country": country, "latitude": latitude, "longitude": longitude, "province/state": state, "city": city, "network": network, "asn": asn, "org": org}), 200
+
+@app.route('/api/', methods=['GET'])
+def api():
+	ip = request.args['ip']
+	ip = str(ip)
+	try:
+		clientip = ipaddress.ip_address(ip)
+		lookup = geoiplookup(clientip)
+		clientip = str(clientip)
+		latitude = lookup[0]
+		longitude = lookup[1]
+		country = lookup[2]
+		state = str(lookup[3])
+		city = str(lookup[4])
+		network = str(lookup[5])
+		asn = lookup[6]	
+		org = str(lookup[7])
+		return jsonify({"query": clientip, "country": country, "latitude": latitude, "longitude": longitude, "province/state": state, "city": city, "network": network, "asn": asn, "org": org}), 200
+	except:
+		return jsonify({"error": "Please enter an IP address", "example": "https://ips.rocks/api/?ip=8.8.8.8"}), 500
+
 if __name__ == '__main__':
   app.run(host='0.0.0.0', debug=False, use_reloader=False, port=443)
 

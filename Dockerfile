@@ -4,6 +4,7 @@ RUN apt-get install -y python-pip python-dev build-essential
 
 RUN pip install Flask
 RUN pip install geoip2
+RUN pip install ipaddress
 
 COPY . /app 
 WORKDIR /app
