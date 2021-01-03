@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 from flask import *
 import json, geoip2.database, ipaddress
+from datetime import datetime
 
 cityreader = geoip2.database.Reader('./geoip_files/GeoLite2-City.mmdb')
 asnreader =  geoip2.database.Reader('./geoip_files/GeoLite2-ASN.mmdb')
@@ -41,6 +42,8 @@ def home():
 		network = str(lookup[5])
 		asn = lookup[6]	
 		org = lookup[7]
+		dt = datetime.now()
+		print ("{} | {} | GET /".format(dt,clientip))
 		return jsonify({"query": clientip, "country": country, "latitude": latitude, "longitude": longitude, "province/state": state, "city": city, "network": network, "asn": asn, "org": org}), 200
 	else:
 		clientip = request.remote_addr
@@ -58,12 +61,18 @@ def home():
 		network = str(lookup[5])
 		asn = lookup[6]	
 		org = lookup[7]
+		dt = datetime.now()
+		print ("{} | {} | GET /".format(dt,clientip))
 		return jsonify({"query": clientip, "country": country, "latitude": latitude, "longitude": longitude, "province/state": state, "city": city, "network": network, "asn": asn, "org": org}), 200
 
 @app.route('/api/', methods=['GET'])
 def api():
 	ip = request.args['ip']
 	ip = str(ip)
+	if request.headers.getlist("X-Forwarded-For"):
+		sourceip = request.headers.getlist("X-Forwarded-For")[0]
+	else:
+		sourceip = request.remote_addr
 	try:
 		clientip = ipaddress.ip_address(ip)
 		lookup = geoiplookup(clientip)
@@ -76,8 +85,12 @@ def api():
 		network = str(lookup[5])
 		asn = lookup[6]	
 		org = str(lookup[7])
+		dt = datetime.now()
+		print ("{} | {} | GET /api/?={}".format(dt,sourceip,ip))
 		return jsonify({"query": clientip, "country": country, "latitude": latitude, "longitude": longitude, "province/state": state, "city": city, "network": network, "asn": asn, "org": org}), 200
 	except:
+		dt = datetime.now()
+		print ("{} | {} | GET /api/?={}".format(dt,sourceip,ip))
 		return jsonify({"error": "Please enter an IP address", "example": "https://ips.rocks/api/?ip=8.8.8.8"}), 500
 
 if __name__ == '__main__':
