@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 from flask import *
+from flask_sslify import SSLify
 import json, geoip2.database, ipaddress
 from datetime import datetime
 
@@ -24,6 +25,7 @@ def geoiplookup(clientip):
 		return latitude, longitude, country, state, city, network, asn, org
 
 app = Flask(__name__)
+sslify = SSLify(app)
 @app.route('/', methods=['GET'])
 def home():
 	if request.headers.getlist("X-Forwarded-For"):
