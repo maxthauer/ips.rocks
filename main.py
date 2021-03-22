@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 from flask import *
-#from flask_sslify import SSLify
+from flask_sslify import SSLify
 import json, geoip2.database, ipaddress
 from datetime import datetime
 
@@ -119,4 +119,4 @@ def time():
 	return jsonify(epoch), 200
 
 if __name__ == '__main__':
-  app.run(host='0.0.0.0', debug=False, use_reloader=False, port=443)
+  app.run(host='0.0.0.0', debug=False, use_reloader=False, port=5000)
