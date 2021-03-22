@@ -95,7 +95,28 @@ def api():
 		print ("{} | {} | GET /api/?={}".format(dt,sourceip,ip))
 		return jsonify({"error": "Please enter an IP address", "example": "https://ips.rocks/api/?ip=8.8.8.8"}), 500
 
+@app.route('/plain', methods=['GET'])
+def plain():
+	if request.headers.getlist("X-Forwarded-For"):
+		clientip = request.headers.getlist("X-Forwarded-For")[0]
+		clientip = clientip.split(",")
+		clientip = clientip[0]
+		dt = datetime.now()
+		print (clientip)
+		print ("{} | {} | GET /plain".format(dt,clientip))
+		return (clientip)
+	else:
+		clientip = request.remote_addr
+		clientip = clientip.split(",")
+		clientip = clientip[0]
+		dt = datetime.now()
+		print ("{} | {} | GET /plain".format(dt,clientip))
+		return (clientip)
+
+@app.route('/time', methods=['GET'])
+def time():
+	epoch = int(datetime.now().timestamp())
+	return jsonify(epoch), 200
+
 if __name__ == '__main__':
   app.run(host='0.0.0.0', debug=False, use_reloader=False, port=443)
-
-
