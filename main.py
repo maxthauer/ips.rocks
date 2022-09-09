@@ -88,11 +88,11 @@ def api():
 		asn = lookup[6]	
 		org = str(lookup[7])
 		dt = datetime.now()
-		print ("#iplocation# | {} | {} | GET | /api/?={}".format(dt,sourceip,ip))
+		print ("#iplocation# | {} | {} | GET | /api/?ip={}".format(dt,sourceip,ip))
 		return jsonify({"query": clientip, "country": country, "latitude": latitude, "longitude": longitude, "province/state": state, "city": city, "network": network, "asn": asn, "org": org}), 200
 	except:
 		dt = datetime.now()
-		print ("#iplocation# | {} | {} | GET | /api/?={}".format(dt,sourceip,ip))
+		print ("#iplocation# | {} | {} | GET | /api/?ip={}".format(dt,sourceip,ip))
 		return jsonify({"error": "Please enter an IP address", "example": "https://ips.rocks/api/?ip=8.8.8.8"}), 500
 
 @app.route('/plain', methods=['GET'])
