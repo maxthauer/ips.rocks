@@ -3,3 +3,4 @@ Flask-SSLify
 geoip2
 ipaddress
 gunicorn
+google-cloud-logging
