@@ -45,7 +45,7 @@ def home():
 		asn = lookup[6]	
 		org = lookup[7]
 		dt = datetime.now()
-		print ("#iplocation# | {} | {} | GET | /".format(dt,clientip))
+		print ("#iplocation#|{}|{}|GET|/".format(dt,clientip))
 		return jsonify({"query": clientip, "country": country, "latitude": latitude, "longitude": longitude, "province/state": state, "city": city, "network": network, "asn": asn, "org": org}), 200
 	else:
 		clientip = request.remote_addr
@@ -64,7 +64,7 @@ def home():
 		asn = lookup[6]	
 		org = lookup[7]
 		dt = datetime.now()
-		print ("#iplocation# | {} | {} | GET | /".format(dt,clientip))
+		print ("#iplocation#|{}|{}|GET|/".format(dt,clientip))
 		return jsonify({"query": clientip, "country": country, "latitude": latitude, "longitude": longitude, "province/state": state, "city": city, "network": network, "asn": asn, "org": org}), 200
 
 @app.route('/api/', methods=['GET'])
@@ -88,11 +88,11 @@ def api():
 		asn = lookup[6]	
 		org = str(lookup[7])
 		dt = datetime.now()
-		print ("#iplocation# | {} | {} | GET | /api/?ip={}".format(dt,sourceip,ip))
+		print ("#iplocation#|{}|{}|GET|/api/?ip={}".format(dt,sourceip,ip))
 		return jsonify({"query": clientip, "country": country, "latitude": latitude, "longitude": longitude, "province/state": state, "city": city, "network": network, "asn": asn, "org": org}), 200
 	except:
 		dt = datetime.now()
-		print ("#iplocation# | {} | {} | GET | /api/?ip={}".format(dt,sourceip,ip))
+		print ("#iplocation#|{}|{}|GET|/api/?ip={}".format(dt,sourceip,ip))
 		return jsonify({"error": "Please enter an IP address", "example": "https://ips.rocks/api/?ip=8.8.8.8"}), 500
 
 @app.route('/plain', methods=['GET'])
@@ -103,14 +103,14 @@ def plain():
 		clientip = clientip[0]
 		dt = datetime.now()
 		print (clientip)
-		print ("#iplocation# | {} | {} | GET | /plain".format(dt,clientip))
+		print ("#iplocation#|{}|{}|GET|/plain".format(dt,clientip))
 		return (clientip)
 	else:
 		clientip = request.remote_addr
 		clientip = clientip.split(",")
 		clientip = clientip[0]
 		dt = datetime.now()
-		print ("#iplocation# | {} | {} | GET | /plain".format(dt,clientip))
+		print ("#iplocation#|{}|{}|GET|/plain".format(dt,clientip))
 		return (clientip)
 
 @app.route('/time', methods=['GET'])
