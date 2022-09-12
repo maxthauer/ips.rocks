@@ -1,13 +1,9 @@
 #!/usr/bin/python3
-import logging
-import google.cloud.logging
 from flask import *
 from flask_sslify import SSLify
 import json, geoip2.database, ipaddress
 from datetime import datetime
 
-
-client = google.cloud.logging.Client()
 cityreader = geoip2.database.Reader('./geoip_files/GeoLite2-City.mmdb')
 asnreader =  geoip2.database.Reader('./geoip_files/GeoLite2-ASN.mmdb')
 
@@ -50,8 +46,7 @@ def home():
 		org = lookup[7]
 		#dt = datetime.now()
 		dt = int(datetime.now().timestamp())
-		logentry = ("#iplocation#|{}|{}|GET|/".format(dt,clientip))
-		logger = client.logger(logentry)
+		print ("#iplocation#|{}|{}|GET|/".format(dt,clientip))
 		return jsonify({"query": clientip, "country": country, "latitude": latitude, "longitude": longitude, "province/state": state, "city": city, "network": network, "asn": asn, "org": org}), 200
 	else:
 		clientip = request.remote_addr
@@ -70,8 +65,7 @@ def home():
 		asn = lookup[6]	
 		org = lookup[7]
 		dt = int(datetime.now().timestamp())
-		logentry = ("#iplocation#|{}|{}|GET|/".format(dt,clientip))
-		logger = client.logger(logentry)
+		print ("#iplocation#|{}|{}|GET|/".format(dt,clientip))
 		return jsonify({"query": clientip, "country": country, "latitude": latitude, "longitude": longitude, "province/state": state, "city": city, "network": network, "asn": asn, "org": org}), 200
 
 @app.route('/api/', methods=['GET'])
@@ -95,13 +89,11 @@ def api():
 		asn = lookup[6]	
 		org = str(lookup[7])
 		dt = int(datetime.now().timestamp())
-		logentry = ("#iplocation#|{}|{}|GET|/api/?ip={}".format(dt,sourceip,ip))
-		logger = client.logger(logentry)
+		print ("#iplocation#|{}|{}|GET|/api/?ip={}".format(dt,sourceip,ip))
 		return jsonify({"query": clientip, "country": country, "latitude": latitude, "longitude": longitude, "province/state": state, "city": city, "network": network, "asn": asn, "org": org}), 200
 	except:
 		dt = int(datetime.now().timestamp())
-		logentry = ("#iplocation#|{}|{}|GET|/api/?ip={}".format(dt,sourceip,ip))
-		logger = client.logger(logentry)
+		print ("#iplocation#|{}|{}|GET|/api/?ip={}".format(dt,sourceip,ip))
 		return jsonify({"error": "Please enter an IP address", "example": "https://ips.rocks/api/?ip=8.8.8.8"}), 500
 
 @app.route('/plain', methods=['GET'])
@@ -112,16 +104,14 @@ def plain():
 		clientip = clientip[0]
 		dt = int(datetime.now().timestamp())
 		#print (clientip)
-		logentry = ("#iplocation#|{}|{}|GET|/plain".format(dt,clientip))
-		logger = client.logger(logentry)
+		print ("#iplocation#|{}|{}|GET|/plain".format(dt,clientip))
 		return (clientip)
 	else:
 		clientip = request.remote_addr
 		clientip = clientip.split(",")
 		clientip = clientip[0]
 		dt = int(datetime.now().timestamp())
-		logentry = ("#iplocation#|{}|{}|GET|/plain".format(dt,clientip))
-		logger = client.logger(logentry)
+		print ("#iplocation#|{}|{}|GET|/plain".format(dt,clientip))
 		return (clientip)
 
 @app.route('/time', methods=['GET'])
