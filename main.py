@@ -1,10 +1,11 @@
 #!/usr/bin/python3
+import logging
+import google.cloud.logging
 from flask import *
 from flask_sslify import SSLify
 import json, geoip2.database, ipaddress
 from datetime import datetime
-import logging
-import google.cloud.logging
+
 
 client = google.cloud.logging.Client()
 cityreader = geoip2.database.Reader('./geoip_files/GeoLite2-City.mmdb')
