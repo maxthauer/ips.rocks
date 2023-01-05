@@ -143,14 +143,12 @@ def time():
 		dt = int(datetime.now().timestamp())
 		#print (clientip)
 		print ("#iplocation#|{}|{}|{}|/plain|{}|{}|{}".format(dt,clientip,request.method,request.url,request.referrer,ua))
-		return (clientip)
 	else:
 		clientip = request.remote_addr
 		clientip = clientip.split(",")
 		clientip = clientip[0]
 		dt = int(datetime.now().timestamp())
 		print ("#iplocation#|{}|{}|{}|/plain|{}|{}|{}".format(dt,clientip,request.method,request.url,request.referrer,ua))
-		return (clientip)
 	epoch = int(datetime.now().timestamp())
 	print ("#iplocation#|{}|{}|{}|/time|{}|{}|{}".format(dt,clientip,request.method,request.url,request.referrer,ua))
 	return jsonify(epoch), 200
