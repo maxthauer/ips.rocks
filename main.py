@@ -36,6 +36,10 @@ def home():
 			lookup = geoiplookup(clientip)
 		except:
 			lookup = geoiplookup(clientip)
+		try:
+			ua = request.headers.get('User-Agent')
+		except:
+			ua = ''
 		latitude = lookup[0]
 		longitude = lookup[1]
 		country = lookup[2]
@@ -46,7 +50,7 @@ def home():
 		org = lookup[7]
 		#dt = datetime.now()
 		dt = int(datetime.now().timestamp())
-		print ("#iplocation#|{}|{}|GET|/".format(dt,clientip))
+		print ("#iplocation#|{}|{}|{}|/|".format(dt,clientip,request.method,request.url,request.referrer,ua))
 		return jsonify({"query": clientip, "country": country, "latitude": latitude, "longitude": longitude, "province/state": state, "city": city, "network": network, "asn": asn, "org": org}), 200
 	else:
 		clientip = request.remote_addr
@@ -56,6 +60,10 @@ def home():
 			lookup = geoiplookup(clientip)
 		except:
 			lookup = geoiplookup(clientip)
+		try:
+			ua = request.headers.get('User-Agent')
+		except:
+			ua = ''
 		latitude = lookup[0]
 		longitude = lookup[1]
 		country = lookup[2]
@@ -65,7 +73,7 @@ def home():
 		asn = lookup[6]	
 		org = lookup[7]
 		dt = int(datetime.now().timestamp())
-		print ("#iplocation#|{}|{}|GET|/".format(dt,clientip))
+		print ("#iplocation#|{}|{}|{}|/|".format(dt,clientip,request.method,request.url,request.referrer,ua))
 		return jsonify({"query": clientip, "country": country, "latitude": latitude, "longitude": longitude, "province/state": state, "city": city, "network": network, "asn": asn, "org": org}), 200
 
 @app.route('/api/', methods=['GET'])
@@ -76,6 +84,10 @@ def api():
 		sourceip = request.headers.getlist("X-Forwarded-For")[0]
 	else:
 		sourceip = request.remote_addr
+	try:
+		ua = request.headers.get('User-Agent')
+	except:
+		ua = ''
 	try:
 		clientip = ipaddress.ip_address(ip)
 		lookup = geoiplookup(clientip)
@@ -89,34 +101,58 @@ def api():
 		asn = lookup[6]	
 		org = str(lookup[7])
 		dt = int(datetime.now().timestamp())
-		print ("#iplocation#|{}|{}|GET|/api/?ip={}".format(dt,sourceip,ip))
+		print ("#iplocation#|{}|{}|{}|/api/?ip={}|{}|{}|{}".format(dt,sourceip,request.method,ip,request.url,request.referrer,ua))
 		return jsonify({"query": clientip, "country": country, "latitude": latitude, "longitude": longitude, "province/state": state, "city": city, "network": network, "asn": asn, "org": org}), 200
 	except:
 		dt = int(datetime.now().timestamp())
-		print ("#iplocation#|{}|{}|GET|/api/?ip={}".format(dt,sourceip,ip))
+		print ("#iplocation#|{}|{}|{}|/api/?ip={}|{}|{}|{}".format(dt,sourceip,request.method,ip,request.url,request.referrer,ua))
 		return jsonify({"error": "Please enter an IP address", "example": "https://ips.rocks/api/?ip=8.8.8.8"}), 500
 
 @app.route('/plain', methods=['GET'])
 def plain():
+	try:
+		ua = request.headers.get('User-Agent')
+	except:
+		ua = ''
 	if request.headers.getlist("X-Forwarded-For"):
 		clientip = request.headers.getlist("X-Forwarded-For")[0]
 		clientip = clientip.split(",")
 		clientip = clientip[0]
 		dt = int(datetime.now().timestamp())
 		#print (clientip)
-		print ("#iplocation#|{}|{}|GET|/plain".format(dt,clientip))
+		print ("#iplocation#|{}|{}|{}|/plain|{}|{}|{}".format(dt,clientip,request.method,request.url,request.referrer,ua))
 		return (clientip)
 	else:
 		clientip = request.remote_addr
 		clientip = clientip.split(",")
 		clientip = clientip[0]
 		dt = int(datetime.now().timestamp())
-		print ("#iplocation#|{}|{}|GET|/plain".format(dt,clientip))
+		print ("#iplocation#|{}|{}|{}|/plain|{}|{}|{}".format(dt,clientip,request.method,request.url,request.referrer,ua))
 		return (clientip)
 
 @app.route('/time', methods=['GET'])
 def time():
+	try:
+		ua = request.headers.get('User-Agent')
+	except:
+		ua = ''
+	if request.headers.getlist("X-Forwarded-For"):
+		clientip = request.headers.getlist("X-Forwarded-For")[0]
+		clientip = clientip.split(",")
+		clientip = clientip[0]
+		dt = int(datetime.now().timestamp())
+		#print (clientip)
+		print ("#iplocation#|{}|{}|{}|/plain|{}|{}|{}".format(dt,clientip,request.method,request.url,request.referrer,ua))
+		return (clientip)
+	else:
+		clientip = request.remote_addr
+		clientip = clientip.split(",")
+		clientip = clientip[0]
+		dt = int(datetime.now().timestamp())
+		print ("#iplocation#|{}|{}|{}|/plain|{}|{}|{}".format(dt,clientip,request.method,request.url,request.referrer,ua))
+		return (clientip)
 	epoch = int(datetime.now().timestamp())
+	print ("#iplocation#|{}|{}|{}|/time|{}|{}|{}".format(dt,clientip,request.method,request.url,request.referrer,ua))
 	return jsonify(epoch), 200
 
 if __name__ == '__main__':
