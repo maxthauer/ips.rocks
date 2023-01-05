@@ -50,7 +50,7 @@ def home():
 		org = lookup[7]
 		#dt = datetime.now()
 		dt = int(datetime.now().timestamp())
-		print ("#iplocation#|{}|{}|{}|/|".format(dt,clientip,request.method,request.url,request.referrer,ua))
+		print ("#iplocation#|{}|{}|{}|/|{}|{}|{}".format(dt,clientip,request.method,request.url,request.referrer,ua))
 		return jsonify({"query": clientip, "country": country, "latitude": latitude, "longitude": longitude, "province/state": state, "city": city, "network": network, "asn": asn, "org": org}), 200
 	else:
 		clientip = request.remote_addr
@@ -73,7 +73,7 @@ def home():
 		asn = lookup[6]	
 		org = lookup[7]
 		dt = int(datetime.now().timestamp())
-		print ("#iplocation#|{}|{}|{}|/|".format(dt,clientip,request.method,request.url,request.referrer,ua))
+		print ("#iplocation#|{}|{}|{}|/|{}|{}|{}".format(dt,clientip,request.method,request.url,request.referrer,ua))
 		return jsonify({"query": clientip, "country": country, "latitude": latitude, "longitude": longitude, "province/state": state, "city": city, "network": network, "asn": asn, "org": org}), 200
 
 @app.route('/api/', methods=['GET'])
