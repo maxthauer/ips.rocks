@@ -14,15 +14,16 @@ def geoiplookup(clientip):
 		latitude = cityresponse.location.latitude
 		longitude = cityresponse.location.longitude
 		country = cityresponse.country.name
+		iso_code = cityresponse.country.iso_code
 		state = cityresponse.subdivisions.most_specific.name
 		city = cityresponse.city.name
 		network = cityresponse.traits.network
 		asn = asnresponse.autonomous_system_number
 		org = asnresponse.autonomous_system_organization
-		return latitude, longitude, country, state, city, network, asn, org
+		return latitude, longitude, country, state, city, network, asn, org, iso_code
 	except:
-		latitude = longitude = country = state = city = network = asn = org = 'N/A'
-		return latitude, longitude, country, state, city, network, asn, org
+		latitude = longitude = country = state = city = network = asn = org, iso_code = 'N/A'
+		return latitude, longitude, country, state, city, network, asn, org, iso_code
 
 app = Flask(__name__)
 #sslify = SSLify(app)
@@ -48,10 +49,11 @@ def home():
 		network = str(lookup[5])
 		asn = lookup[6]	
 		org = lookup[7]
+		iso_code = lookup[8]
 		#dt = datetime.now()
 		dt = int(datetime.now().timestamp())
 		print ("#iplocation#|{}|{}|{}|/|{}|{}|{}".format(dt,clientip,request.method,request.url,request.referrer,ua))
-		return jsonify({"query": clientip, "country": country, "latitude": latitude, "longitude": longitude, "province/state": state, "city": city, "network": network, "asn": asn, "org": org}), 200
+		return jsonify({"query": clientip, "country": country, "latitude": latitude, "longitude": longitude, "province/state": state, "city": city, "network": network, "asn": asn, "org": org, "iso_code": iso_code}), 200
 	else:
 		clientip = request.remote_addr
 		try:
@@ -72,9 +74,10 @@ def home():
 		network = str(lookup[5])
 		asn = lookup[6]	
 		org = lookup[7]
+		iso_code = lookup[8]
 		dt = int(datetime.now().timestamp())
 		print ("#iplocation#|{}|{}|{}|/|{}|{}|{}".format(dt,clientip,request.method,request.url,request.referrer,ua))
-		return jsonify({"query": clientip, "country": country, "latitude": latitude, "longitude": longitude, "province/state": state, "city": city, "network": network, "asn": asn, "org": org}), 200
+		return jsonify({"query": clientip, "country": country, "latitude": latitude, "longitude": longitude, "province/state": state, "city": city, "network": network, "asn": asn, "org": org, "iso_code": iso_code}), 200
 
 @app.route('/api/', methods=['GET'])
 def api():
@@ -100,9 +103,10 @@ def api():
 		network = str(lookup[5])
 		asn = lookup[6]	
 		org = str(lookup[7])
+		iso_code = str(lookup[8])
 		dt = int(datetime.now().timestamp())
 		print ("#iplocation#|{}|{}|{}|/api/?ip={}|{}|{}|{}".format(dt,sourceip,request.method,ip,request.url,request.referrer,ua))
-		return jsonify({"query": clientip, "country": country, "latitude": latitude, "longitude": longitude, "province/state": state, "city": city, "network": network, "asn": asn, "org": org}), 200
+		return jsonify({"query": clientip, "country": country, "latitude": latitude, "longitude": longitude, "province/state": state, "city": city, "network": network, "asn": asn, "org": org, "iso_code": iso_code}), 200
 	except:
 		dt = int(datetime.now().timestamp())
 		print ("#iplocation#|{}|{}|{}|/api/?ip={}|{}|{}|{}".format(dt,sourceip,request.method,ip,request.url,request.referrer,ua))
