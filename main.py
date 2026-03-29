@@ -22,8 +22,8 @@ def geoiplookup(clientip):
 		org = asnresponse.autonomous_system_organization
 		return latitude, longitude, country, state, city, network, asn, org, iso_code
 	except:
-		latitude = longitude = country = state = city = network = asn = org, iso_code = 'N/A'
-		return latitude, longitude, country, state, city, network, asn, org, iso_code
+		latitude = longitude = country = state = city = network = asn = org = iso_code = 'N/A'
+        return latitude, longitude, country, state, city, network, asn, org, iso_code
 
 app = Flask(__name__)
 #sslify = SSLify(app)
