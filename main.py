@@ -23,7 +23,7 @@ def geoiplookup(clientip):
 		return latitude, longitude, country, state, city, network, asn, org, iso_code
 	except:
 		latitude = longitude = country = state = city = network = asn = org = iso_code = 'N/A'
-        return latitude, longitude, country, state, city, network, asn, org, iso_code
+		return latitude, longitude, country, state, city, network, asn, org, iso_code
 
 app = Flask(__name__)
 #sslify = SSLify(app)
@@ -158,5 +158,5 @@ def time():
 	return jsonify(epoch), 200
 
 if __name__ == '__main__':
-  #app.run(host='0.0.0.0', debug=False, use_reloader=False, port=443)
-  app.run(host='0.0.0.0', port=8080, debug=False, use_reloader=False)
+	#app.run(host='0.0.0.0', debug=False, use_reloader=False, port=443)
+	app.run(host='0.0.0.0', port=8080, debug=False, use_reloader=False)
