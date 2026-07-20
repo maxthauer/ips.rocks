@@ -2,7 +2,7 @@
 from flask import *
 from flask_sslify import SSLify
 import json, geoip2.database, ipaddress
-from datetime import datetime
+from datetime import datetime, timezone
 
 cityreader = geoip2.database.Reader('./geoip_files/GeoLite2-City.mmdb')
 asnreader =  geoip2.database.Reader('./geoip_files/GeoLite2-ASN.mmdb')
@@ -156,6 +156,39 @@ def time():
 	epoch = int(datetime.now().timestamp())
 	print ("#iplocation#|{}|{}|{}|/time|{}|{}|{}".format(dt,clientip,request.method,request.url,request.referrer,ua))
 	return jsonify(epoch), 200
+
+@app.route('/tsdecode/<path:timestamp>', methods=['GET'])
+def tsdecode(timestamp):
+	# Log the incoming request to stay consistent with your logging pattern
+	if request.headers.getlist("X-Forwarded-For"):
+		clientip = request.headers.getlist("X-Forwarded-For")[0].split(",")[0]
+	else:
+		clientip = request.remote_addr
+	
+	ua = request.headers.get('User-Agent', '')
+	dt_now = int(datetime.now().timestamp())
+	print("#iplocation#|{}|{}|{}|/tsdecode/{}|{}|{}|{}".format(
+		dt_now, clientip, request.method, timestamp, request.url, request.referrer, ua
+	))
+
+	try:
+		# Convert incoming string to float (handles both int and float timestamps)
+		ts_val = float(timestamp)
+		
+		# Convert epoch to datetime (using UTC)
+		decoded_dt = datetime.fromtimestamp(ts_val, tz=timezone.utc)
+		
+		# Format as YYYY-MM-DD HH:MM:SS
+		formatted_time = decoded_dt.strftime('%Y-%m-%d %H:%M:%S')
+		
+		return jsonify({
+			"epoch": ts_val,
+			"datetime": formatted_time,
+			"timezone": "UTC"
+		}), 200
+
+	except (ValueError, OverflowError, OSError):
+		return jsonify({"error": "Invalid epoch timestamp provided"}), 400
 
 if __name__ == '__main__':
 	#app.run(host='0.0.0.0', debug=False, use_reloader=False, port=443)
